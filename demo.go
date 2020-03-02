@@ -56,6 +56,9 @@ func main() {
 		}
 		// and then print out the user's Name attribute
 		log.Printf(user.Name)
+
+		// https://www.golangprograms.com/how-to-print-struct-variables-data.html
+		log.Printf("%+v\n", user)
 	}
 
 }
