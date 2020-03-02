@@ -15,10 +15,17 @@ var dbuser string = os.Getenv("DBUSER")
 var dbpass string = os.Getenv("DBPASS")
 var dbname string = os.Getenv("DBNAME")
 
+// User ...
+type User struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
 func main() {
 	fmt.Println("Go MySQL Tutorial")
 
 	// https://tutorialedge.net/golang/golang-mysql-tutorial/
+	// https://www.geeksforgeeks.org/different-ways-to-concatenate-two-strings-in-golang
 
 	// Open up our database connection.
 	db, err := sql.Open("mysql", dbuser+":"+dbpass+"@tcp("+dbhost+":3306)/"+dbname)
@@ -32,21 +39,23 @@ func main() {
 	// executing
 	defer db.Close()
 
+	// https://tutorialedge.net/golang/golang-mysql-tutorial/#populating-structs-from-results
+
 	// Execute the query
-	results, err := db.Query("SELECT * FROM `user`")
+	results, err := db.Query("SELECT user_id, username FROM `user`")
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
 
 	for results.Next() {
-		var tag Tag
-		// for each row, scan the result into our tag composite object
-		err = results.Scan(&tag.ID, &tag.Name)
+		var user User
+		// for each row, scan the result into our user composite object
+		err = results.Scan(&user.ID, &user.Name)
 		if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
-		// and then print out the tag's Name attribute
-		log.Printf(tag.Name)
+		// and then print out the user's Name attribute
+		log.Printf(user.Name)
 	}
 
 }
